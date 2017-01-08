@@ -980,6 +980,7 @@ class ScholarQuerier(object):
         This method initiates a search query (a ScholarQuery instance)
         with subsequent parsing of the response.
         """
+        
         self.clear_articles()
         self.query = query
 

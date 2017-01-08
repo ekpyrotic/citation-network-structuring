@@ -22,8 +22,9 @@ def build_comparison_2d_array(list_names):
 def build_citation_map(list_articles):
     citationmap = {}
     for art in list_articles:
-        citationmap[art.attrs["title"][0]] = art.attrs["url_citations"][0]
-        print(art.attrs["title"][0] + " : " + art.attrs["url_citations"][0])
+        citationmap[art.attrs["title"][0]] = find_titles(art.attrs["url_citations"][0])
+        #print(art.attrs["title"][0] + " : " + art.attrs["url_citations"][0])
+    return citationmap
 def print_2d_array(map):
     for row in map:
         for item in row:
@@ -31,10 +32,26 @@ def print_2d_array(map):
         print("\n")
 def print_map(map):
     for key in map.keys():
-        print(key +" : " + map[key])
-
+        for i in map[key]:
+            print(key +" : " + (map[key][i]).attrs[["title"][0]])
+def find_titles(inputurl):
+    q = scholar.ScholarQuerier()
+    html = q._get_http_response(url=inputurl,
+                                       log_msg='dump of settings form HTML',
+                                       err_msg='requesting settings failed')
+    if html is None:
+            return
+    q.parse(html)
+    return q.articles
+    
+    
 articles = setup(scholar.ScholarSettings.CITFORM_BIBTEX, "physics",10)
 map = build_citation_map(articles)
+print_map(map)
+#for art in find_titles("http://scholar.google.com/scholar?cites=15086143302195311818&as_sdt=2005&sciodt=0,5&hl=en"):
+   # print(art.attrs["title"][0]+"\n")
+
+
 #print_map(map)
 
 
